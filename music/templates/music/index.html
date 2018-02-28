@@ -1,0 +1,51 @@
+{% extends 'music/base.html' %}
+
+
+{% block body %}
+<h2>You are in album section</h2>
+{% if all_album %}
+
+{% for album in all_album %}
+<!--Details-->
+<div class="col-sm-4 col-lg-3">
+    <div class=thumbnail>
+        <a href="{% url 'music:details' album.id %}">
+            <img src="{{album.album_logo.url}}" class="img-thumbnail">
+        </a>
+
+        <div class="caption">
+            <h2>{{ album.album_title }}</h2>
+            <h4>{{ album.artist }}</h4>
+
+            <!-- View Details -->
+            <a href="{% url 'music:details' album.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+
+            <!-- Delete Album -->
+            <form action="{% url 'music:delete_album' album.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="album_id" value="{{ album.id }}"/>
+                <button type="submit" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </button>
+            </form>
+            <!-- Favorite Album -->
+            <a href="#" class="btn btn-default btn-sm btn-favorite"
+               role="button">
+                <span class="glyphicon glyphicon-star {% if album.is_favorite %}active{% endif %}"></span>
+            </a>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+{% endfor %}
+
+{% else %}
+<h3>No album to show </h3>
+
+{% endif %}
+{% endblock %}
